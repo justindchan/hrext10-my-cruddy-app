@@ -11,6 +11,9 @@ inputs (border swag)
 https://getbootstrap.com/docs/4.3/getting-started/introduction/
 */
 
+body {background-color: #333333
+}
+
 th {
   text-decoration: underline;
 }
@@ -18,3 +21,22 @@ th {
 label {
   text-decoration: underline;
 }
+
+table
+{
+    counter-reset: rowNumber;
+}
+
+table tr > td:first-child
+{
+    counter-increment: rowNumber;
+}
+
+table tr td:first-child::before
+{
+    content: counter(rowNumber)'.';
+    min-width: 1em;
+    margin-right: 0.5em;
+}
+
+
