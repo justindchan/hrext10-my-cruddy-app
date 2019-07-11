@@ -28,7 +28,9 @@ var showDatabaseContents = function() {
 
   for (var i = 0; i < window.localStorage.length; i++) {
     var key = window.localStorage.key(i);
-    $('tbody').append(`<tr><td>${key}</td><td>${window.localStorage.getItem(key)}</td></tr>`)
+    
+    $('tbody').append(`<tr><td>${key}</td><td>${window.localStorage.getItem(key)}</td> <td><button class='btn btn-info btn-sm mr-2 col-sm-3 btn-edit'>Edit</button><button class='btn btn-danger btn-sm mr-2 col-sm-3 btn-delete'>Delete</button></td> </tr>`)
+
   }
 }
 
@@ -107,4 +109,59 @@ $(document).ready(function() {
       showDatabaseContents();
     }
   })
+
+  $(".row_drag").sortable({
+    delay: 100,
+    stop: function() {
+      var selectedRow = new Array();
+      $('.row_drag>tr').each(function() {
+        selectedRow.push($(this).attr("id"));
+      });
+    }
+  });
+
+  $("tbody").on("click", ".btn-delete", function(){
+    $(this).parents("tr").remove();
+  })
+
+  $("body").on("click", ".btn-edit", function(){
+        var name = $(this).parents("tr").attr('data-name');
+        var email = $(this).parents("tr").attr('data-email');
+    
+        $(this).parents("tr").find("td:eq(0)").html('<input name="edit_name" value="'+name+'">');
+        $(this).parents("tr").find("td:eq(1)").html('<input name="edit_email" value="'+email+'">');
+    
+        $(this).parents("tr").find("td:eq(2)").prepend("<button class='btn btn-info btn-sm mr-2 col-sm-3 btn-update'>Update</button><button class='btn btn-warning btn-sm mr-2 col-sm-3 btn-cancel'>Cancel</button>")
+        $(this).hide();
+    });
+
+  $("body").on("click", ".btn-cancel", function(){
+        var name = $(this).parents("tr").attr('data-name');
+        var email = $(this).parents("tr").attr('data-email');
+    
+        $(this).parents("tr").find("td:eq(0)").text(name);
+        $(this).parents("tr").find("td:eq(1)").text(email);
+   
+        $(this).parents("tr").find(".btn-edit").show();
+        $(this).parents("tr").find(".btn-update").remove();
+        $(this).parents("tr").find(".btn-cancel").remove();
+    });
+   
+    $("body").on("click", ".btn-update", function(){
+        var name = $(this).parents("tr").find("input[name='edit_name']").val();
+        var email = $(this).parents("tr").find("input[name='edit_email']").val();
+    
+        $(this).parents("tr").find("td:eq(0)").text(name);
+        $(this).parents("tr").find("td:eq(1)").text(email);
+     
+        $(this).parents("tr").attr('data-name', name);
+        $(this).parents("tr").attr('data-email', email);
+    
+        $(this).parents("tr").find(".btn-edit").show();
+        $(this).parents("tr").find(".btn-cancel").remove();
+        $(this).parents("tr").find(".btn-update").remove();
+    });
+
+
 })
+
