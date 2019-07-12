@@ -122,6 +122,9 @@ $(document).ready(function() {
 
   $("tbody").on("click", ".btn-delete", function(){
     $(this).parents("tr").remove();
+    deleteItem($('.key').val());
+    // showDatabaseContents();
+    resetInputs();
   })
 
   $("body").on("click", ".btn-edit", function(){
